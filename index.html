@@ -1,0 +1,633 @@
+div<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apresentação: A Reforma Tributária e o Fluxo Contínuo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Harmony (Tailwind Slate, Sky Blue) -->
+    <!-- Application Structure Plan: The SPA uses a clear, section-based navigation to guide the user through the core concepts of the tax reform. The structure flows logically from the high-level changes (Tax Substitution) to the foundational concepts (ROC, Pillars) and finally to the operational details (Operational Pillars, Sovereign Cloud, Assisted Assessment, Architecture). This thematic, top-down approach is more intuitive for learning than a simple linear document. -->
+    <!-- Visualization & Content Choices: 1. Tax Substitution -> Goal: Compare -> Viz: Side-by-side HTML/CSS diagram & a Chart.js Donut Chart -> Justification: Provides a direct, at-a-glance comparison of the old vs. new tax structure. 2. 7 Pillars -> Goal: Organize/Inform -> Viz: Interactive card grid with modal -> Justification: Chunks dense information, encourages user interaction, prevents information overload. 3. Diagrams -> Goal: Illustrate -> Viz: Static images -> Justification: The provided diagrams are clear and effectively support the textual explanations for ROC and Assisted Assessment. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+            color: #334155; /* slate-700 */
+        }
+        .section {
+            scroll-margin-top: 80px;
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #0284c7; /* sky-600 */
+            border-bottom-color: #0284c7;
+        }
+        .pillar-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .pillar-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.);
+        }
+        #modal-backdrop {
+            transition: opacity 0.3s;
+        }
+        #modal-content {
+            transition: transform 0.3s, opacity 0.3s;
+        }
+    </style>
+</head>
+<body class="bg-slate-50">
+
+    <header class="bg-white/80 backdrop-blur-md shadow-sm fixed top-0 left-0 right-0 z-50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-sky-800">RTC</h1>
+                </div>
+                <nav class="hidden lg:block">
+                    <ul class="flex items-baseline space-x-4">
+                        <li><a href="#intro" class="nav-link text-slate-600 font-medium pb-1 border-b-2 border-transparent">Início</a></li>
+                        <li><a href="#impostos" class="nav-link text-slate-600 font-medium pb-1 border-b-2 border-transparent">Impostos</a></li>
+                        <li><a href="#ivadual" class="nav-link text-slate-600 font-medium pb-1 border-b-2 border-transparent">IVA-Dual</a></li>   
+                        <li><a href="#roc" class="nav-link text-slate-600 font-medium pb-1 border-b-2 border-transparent">ROC</a></li>
+                        <li><a href="#pilares" class="nav-link text-slate-600 font-medium pb-1 border-b-2 border-transparent">Ecossistema</a></li>
+                        <li><a href="#arquitetura" class="nav-link text-slate-600 font-medium pb-1 border-b-2 border-transparent">Arquitetura</a></li>
+                        <li><a href="#apuracao" class="nav-link text-slate-600 font-medium pb-1 border-b-2 border-transparent">Apuração Assistida</a></li>
+                        <li><a href="#calculadora" class="nav-link text-slate-600 font-medium pb-1 border-b-2 border-transparent">Calculadora</a></li>
+                        <li><a href="#sincronismo" class="nav-link text-slate-600 font-medium pb-1 border-b-2 border-transparent">Sincronismo</a></li>
+                        <li><a href="#nuvem" class="nav-link text-slate-600 font-medium pb-1 border-b-2 border-transparent">Nuvem Soberana</a></li>
+                        <li><a href="#motor" class="nav-link text-slate-600 font-medium pb-1 border-b-2 border-transparent">Motor de Regras</a></li>
+                    </ul>
+                </nav>
+                 <button id="mobile-menu-button" class="lg:hidden p-2 rounded-md text-slate-500 hover:text-sky-600 hover:bg-slate-100">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div id="mobile-menu" class="lg:hidden hidden bg-white border-t border-slate-200">
+            <ul class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <li><a href="#intro" class="block nav-link text-slate-600 font-medium p-2 rounded-md hover:bg-slate-100">Início</a></li>
+                <li><a href="#impostos" class="block nav-link text-slate-600 font-medium p-2 rounded-md hover:bg-slate-100">Impostos</a></li>
+                <li><a href="#roc" class="block nav-link text-slate-600 font-medium p-2 rounded-md hover:bg-slate-100">ROC</a></li>
+                <li><a href="#pilares" class="block nav-link text-slate-600 font-medium p-2 rounded-md hover:bg-slate-100">Pilares</a></li>
+                <li><a href="#operacionais" class="block nav-link text-slate-600 font-medium p-2 rounded-md hover:bg-slate-100">Operacionais</a></li>
+                <li><a href="#nuvem" class="block nav-link text-slate-600 font-medium p-2 rounded-md hover:bg-slate-100">Nuvem Soberana</a></li>
+                <li><a href="#apuracao" class="block nav-link text-slate-600 font-medium p-2 rounded-md hover:bg-slate-100">Apuração</a></li>
+                <li><a href="#arquitetura" class="block nav-link text-slate-600 font-medium p-2 rounded-md hover:bg-slate-100">Arquitetura</a></li>
+            </ul>
+        </div>
+    </header>
+
+
+    <main class="pt-20">
+    
+        <!-- Introdução -->
+        <section id="intro" class="section py-16 sm:py-24 bg-sky-800 text-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">A Reforma Tributária Consumo (RTC)</h2>
+                <p class="mt-6 max-w-5xl mx-auto text-lg sm:text-xl">
+                    Uma transformação completa para simplificar, unificar e modernizar a maneira como o país arrecada tributos sobre o consumo. Descubra as chaves para entender essa mudança histórica.
+                </p>
+            </div>
+            
+        </section>
+
+        <!-- Impostos -->
+        <section id="impostos" class="section py-16 sm:py-24">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-slate-800 tracking-tight sm:text-4xl">De 5 Impostos para um Modelo Unificado</h2>
+                    <p class="mt-4 max-w-4xl mx-auto text-lg text-slate-600">Do complexo <strong>Manicômio Tributário</strong> a um sistema de <strong>IVA-Dual</strong>, muito mais simples e transparente.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-start">
+                    <div class="bg-white p-6 rounded-xl shadow-lg">
+                        <h3 class="text-2xl font-bold text-slate-800 text-center mb-6">ANTES</h3>
+                        <div class="space-y-4">
+                            <div class="bg-red-50 p-4 rounded-lg text-red-800 font-medium">PIS</div>
+                            <div class="bg-red-50 p-4 rounded-lg text-red-800 font-medium">COFINS</div>
+                            <div class="bg-orange-50 p-4 rounded-lg text-orange-800 font-medium">IPI</div>
+                            <div class="bg-yellow-50 p-4 rounded-lg text-yellow-800 font-medium">ICMS</div>
+                            <div class="bg-purple-50 p-4 rounded-lg text-purple-800 font-medium">ISS</div>
+                        </div>
+                    </div>     
+                    <div class="bg-white p-6 rounded-xl shadow-lg">
+                        <h3 class="text-2xl font-bold text-slate-800 text-center mb-6">DEPOIS</h3>
+                        <div class="space-y-4">
+                            <div class="bg-sky-50 p-4 rounded-lg text-sky-800">
+                                <p class="font-bold">CBS (Contribuição sobre Bens e Serviços)</p>
+                                <p class="text-sm font-medium">Unifica PIS e COFINS</p>
+                            </div>
+                            <div class="bg-teal-50 p-4 rounded-lg text-teal-800">
+                                <p class="font-bold">IBS (Imposto sobre Bens e Serviços)</p>
+                                <p class="text-sm font-medium">Unifica ICMS e ISS</p>
+                            </div>
+                            <div class="bg-slate-100 p-4 rounded-lg text-slate-800">
+                                <p class="font-bold">IPI (Reconfigurado)</p>
+                                <p class="text-sm font-medium">Mantido para a Zona Franca de Manaus</p>
+                            </div>
+                             <div class="bg-slate-100 p-4 rounded-lg text-slate-800">
+                                <p class="font-bold">Imposto Seletivo (IS)</p>
+                                <p class="text-sm font-medium">Novo imposto sobre itens prejudiciais à saúde/ambiente</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>    
+            </div>
+        </section>
+
+        <!-- IVA - Dual -->
+        <section id="ivadual" class="section py-16 sm:py-24 bg-slate-100">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-slate-800 tracking-tight sm:text-4xl">IVA - Dual</h2>
+                    <p class="mt-4 max-w-5xl mx-auto text-lg text-slate-600">A decisão de criar dois impostos a <strong>CBS</strong> e o <strong>IBS</strong> em vez de um único <strong>IVA</strong> nacional foi uma escolha política para respeitar a autonomia da União, dos estados e dos municípios.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-stretch">
+                    <div class="flex flex-col justify-between bg-white p-8 rounded-xl shadow-lg h-full">
+                        <div>
+                            <h2 class="text-3xl font-bold tracking-tight sm:text-4xl mb-4">União (CBS)</h2>
+                            <p class="max-w-5xl text-lg mb-8 text-justify">A Contribuição sobre Bens e Serviços é o novo imposto de competência da União, administrado pela Receita Federal, que irá substituir o PIS e a COFINS. Toda a receita gerada pela CBS será destinada aos cofres do governo federal.</p>
+                        </div>
+                        <div class="mt-auto">
+                            <img src="aula 01/Captura de tela 2025-07-07 132923.png" alt="Fluxograma explicando Tradutor o ROC" class="rounded-xl shadow-2xl w-full h-auto">
+                        </div>
+                    </div>
+                    <div class="flex flex-col justify-between bg-white p-8 rounded-xl shadow-lg h-full">
+                        <div>
+                            <h2 class="text-3xl font-bold tracking-tight sm:text-4xl mb-4">Estados e Municípios (IBS)</h2>
+                            <p class="max-w-5xl text-lg mb-8 text-justify">O Imposto sobre Bens e Serviços unifica o ICMS (estadual) e o ISS (municipal). Para garantir regras uniformes em todo o país, ele será gerenciado por um Comitê Gestor nacional, com representantes dos estados e municípios, que ficará responsável pela arrecadação e distribuição dos valores entre esses entes.</p>
+                        </div>
+                        <div class="mt-auto">
+                            <img src="aula 01/Captura de tela 2025-07-07 132951.png" alt="Fluxograma explicando Tradutor o ROC" class="rounded-xl shadow-2xl w-full h-auto">
+                        </div>
+                    </div>
+                </div>
+          
+            </div>
+        </section>
+
+        <!-- Registro de Operações de Consumo (ROC) -->
+        <section id="roc" class="section py-16 sm:py-24 bg-sky-800 text-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-20">
+                    <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">O Registro de Operações de Consumo - ROC</h2>
+                    <p class="mt-4 max-w-5xl mx-auto text-lg">O ROC é a peça-chave de todo o novo sistema, ele é um documento gerado por um tradutor universal para todas as transações comerciais do país envolvendo documentos fiscais eletrônicos DF-e.</p>
+                                        <div class="mt-10 max-w-4xl mx-auto">
+                        <img src="aula 01/Captura de tela 2025-07-07 134243.png" alt="Fluxograma explicando Tradutor o ROC" class="rounded-xl shadow-2xl w-full h-auto">
+                        <p class="mt-4 text-sm text-white">A imagem ilustra como diversos documentos fiscais (NF-e, NFS-e, CT-e, etc.) são processados por um  <strong>tradutor</strong> e consolidados em um único formato digital padronizado <strong>Registro de Operação de Consumo (ROC)</strong>.</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-slate-50 p-6 rounded-lg">
+                    <h3 class="text-xl font-bold text-sky-700 mb-2">#Tradutor</h3>
+                       <p class="text-lg text-sky-800">
+                            Sua função é converter os diferentes tipos de notas fiscais (DF-e), em um <strong class="font-bold text-sky-600">formato digital único e padronizado</strong> denominado Registro de Operação de Consumo (ROC).
+                        </p>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold text-sky-700 mb-2">#FormatoDigitalÚnico</h3>
+                         <p class="mt-4 text-lg text-sky-800">
+                           Ao fazer essa tradução, o ROC permite que o novo sistema leia e processe <strong class="font-bold text-sky-600">todas as operações de compra e venda</strong> da mesma maneira.
+                        </p>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold text-sky-700 mb-2">#Automação</h3>
+                       <p class="mt-4 text-lg text-sky-800">
+                           Em resumo, o ROC é a peça-chave que <strong class="font-bold text-sky-600">elimina a complexidade</strong>, permitindo que o novo sistema funcione de maneira integrada, automatizada e transparente.
+                        </p>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold text-sky-700 mb-2">#Transparência</h3>
+                        <p class="mt-4 text-lg text-sky-800">
+                            É essa padronização que torna possível a <strong class="font-bold text-sky-600">Apuração Assistida</strong>, onde o cálculo dos débitos e créditos é feito de forma automática e em tempo real.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ecossistema -->
+        <section id="pilares" class="section py-16 sm:py-24 bg-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-slate-800 tracking-tight sm:text-4xl">Os 7 Pilares do Ecossistema RTC</h2>
+                    <p class="mt-4 max-w-1xl mx-auto text-lg text-slate-600">A nova plataforma digital é sustentada por sete conceitos fundamentais que garantem seu funcionamento. Clique em cada pilar para saber mais.</p>
+                </div>
+                <div id="pillars-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                </div>
+            </div>
+        </section>
+        
+        <!-- Arquitetura do RTC -->
+        <section id="arquitetura" class="section py-16 sm:py-24">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-slate-800 tracking-tight sm:text-4xl">Arquitetura do RTC</h2>
+                    <div class="mt-10 max-w-4xl mx-auto">
+                        <img src="aula 01/Captura de tela 2025-07-07 135128.png" alt="Esteira de Processamento explicando o ROC" class="rounded-xl shadow-2xl w-full h-auto">
+                    </div>
+                    <p class="mt-4 text-sm text-slate-600">O fluxo da informação foi desenhado para não interferir na sua rotina após a emissão do documento fiscal.</p>
+                </div>
+                <div class="text-center mb-12">
+                    <h3 class="text-xl font-bold text-slate-800">Esteira de Processamento após a emissão do DF-e</h3>
+                </div>
+                <div class="space-y-6">
+                    <div class="bg-white p-5 rounded-lg shadow-md flex items-center space-x-4">
+                        <div class="flex-shrink-0 bg-sky-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg">1</div>
+                        <div>
+                            <h3 class="font-bold text-slate-800">Emissão DF-e</h3>
+                            <p class="text-slate-600">A empresa <strong>emite normalmente</strong> a NF-e, NFS-e, CT-e ou outro documento fiscal em <strong>seu próprio sistema</strong>, como sempre fez.</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-5 rounded-lg shadow-md flex items-center space-x-4">
+                        <div class="flex-shrink-0 bg-sky-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg">2</div>
+                        <div>
+                            <h3 class="font-bold text-slate-800">Entrada no Ecossistema RTC</h3>
+                            <p class="text-slate-600">Após  <strong>autorizado</strong>, o documento entra <strong>automaticamente</strong> na nova plataforma da Reforma Tributária.</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-5 rounded-lg shadow-md flex items-center space-x-4">
+                        <div class="flex-shrink-0 bg-sky-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg">3</div>
+                        <div>
+                            <h3 class="font-bold text-slate-800">Tradução para ROC</h3>
+                            <p class="text-slate-600">O sistema imediatamente <strong>traduz</strong> o documento para o formato <strong>padronizado</strong> Registro de Operações de Consumo (ROC).</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-5 rounded-lg shadow-md flex items-center space-x-4">
+                        <div class="flex-shrink-0 bg-sky-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg">4</div>
+                        <div>
+                            <h3 class="font-bold text-slate-800">Processamento Automático</h3>
+                            <p class="text-slate-600">O ROC passa por validações, enriquecimento de dados, cálculo do imposto e pela Apuração Assistida, tudo em tempo real.</p>
+                        </div>
+                    </div>
+                     <div class="bg-white p-5 rounded-lg shadow-md flex items-center space-x-4">
+                        <div class="flex-shrink-0 bg-sky-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg">5</div>
+                        <div>
+                            <h3 class="font-bold text-slate-800">Disponibilização no Portal</h3>
+                            <p class="text-slate-600">O resultado da apuração (débitos e créditos) fica disponível para consulta e validação do contribuinte no Portal da Reforma.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Apuração Assistida -->
+        <section id="apuracao" class="section py-16 sm:py-24 bg-white">
+           <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-slate-800 tracking-tight sm:text-4xl">Apuração Assistida</h2>
+                <p class="mt-4 max-w-6xl mx-auto text-lg text-slate-600">A Apuração Assistida é uma das maiores inovações da Reforma Tributária e muda completamente a lógica de como os impostos são calculados.</p>
+                <div class="mt-10 max-w-4xl mx-auto">
+                    <img src="aula 01/Captura de tela 2025-07-07 134906.png" alt="Fluxograma da Apuração Assistida" class="rounded-xl shadow-2xl w-full h-auto">
+                </div>
+                <p class="mt-4 text-sm text-slate-600">O resultado final é um saldo a pagar ou um crédito a ser utilizado no futuro.</p>
+            </div>
+            <div class="section py-16 sm:py-24">
+                <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-12">
+                        <h3 class="text-3xl font-bold text-slate-800 tracking-tight sm:text-4xl">Cálculo em Tempo Real</h3>
+                        <p class="mt-4 text-lg text-slate-600">Hoje, a sua empresa precisa juntar todas as notas do mês, fazer cálculos complexos e enviar uma declaração como a EFD para o governo, dizendo quanto deve pagar.</p>
+                    </div>
+                    <div class="grid lg:grid-cols-2 gap-12 items-center">
+                         <div class="flex flex-col justify-center h-full">
+                             <div class="flex flex-col items-center justify-center text-center">
+                                 <div class="mt-10 max-w-4xl mx-auto">
+                                     <img src="aula 01/Captura de tela 2025-07-07 140245.png" alt="Fluxograma da Apuração Assistida" class="rounded-xl shadow-2xl w-full h-auto mx-auto">
+                                    </div>
+                                    <p class="mt-4 text-sm text-slate-600">A cada nota fiscal que sua empresa emite, o sistema automaticamente já registra um débito (imposto a pagar) para você e um crédito para o seu cliente.</p>
+                                </div>
+                        </div>
+                        <div class="flex flex-col justify-center space-y-4">
+                            <div class="bg-slate-50 p-4 rounded-lg">
+                                <h3 class="font-bold text-sky-700">1. Débito e Crédito Imediato</h3>
+                                <p>Cada venda gera um  <strong>débito (imposto a pagar)</strong> para o vendedor e um <strong>crédito condicional</strong> para o comprador.</p>
+                            </div>
+                            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg">
+                                <h3 class="font-bold text-yellow-800">2. O Pagamento Libera o Crédito</h3>
+                                <p class="text-yellow-700">O crédito do comprador só se torna utilizável (é compensado) <strong>depois que o vendedor paga o imposto</strong> (o débito) daquela operação. Isso garante que não haverá sonegação na cadeia.</p>
+                            </div>
+                            <div class="bg-slate-50 p-4 rounded-lg">
+                                <h3 class="font-bold text-sky-700">3. Apuração Final Automática</h3>
+                                <p>No fim do período, o sistema <strong>consolida os débitos e os créditos</strong> já liberados para <strong>calcular o saldo final</strong> a pagar ou a ser ressarcido/usado no futuro.</p>
+                            </div>
+                            <div class="bg-slate-50 p-4 rounded-lg">
+                                <h3 class="font-bold text-sky-700">4. Visão Única e Consolidada</h3>
+                                <p>O contribuinte acompanha todo esse fluxo de forma simplificada no Portal da Reforma, mesmo que a gestão da CBS e do IBS seja feita por órgãos diferentes.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+            
+        <!-- Calculadora -->
+        <section id="calculadora" class="section py-16 sm:py-24 bg-slate-100">
+               <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                   <div class="text-center mb-12">
+                       <h2 class="text-3xl font-bold text-slate-800 tracking-tight sm:text-4xl">Calculadora</h2>
+                       <p class="mt-4 max-w-5xl mx-auto text-lg text-slate-600">Uma ferramenta de apoio oficial, disponível para as empresas, que permite simular e conferir o cálculo dos novos tributos em suas operações, garantindo previsibilidade.</p>
+                    </div>
+                    <div class="grid lg:grid-cols-2 gap-12 items-center">
+                        <div class="flex flex-col justify-center h-full">
+                            <div class="space-y-4">
+                                <div class="bg-slate-50 p-4 rounded-lg">
+                                    <h3 class="font-bold text-sky-700">1. Simulação</h3>
+                                    <p>Antes de fechar uma operação, a empresa poderá usar a calculadora para simular exatamente qual será o valor da CBS e do IBS incidentes sobre aquela transação.</p>
+                                </div>
+                                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg">
+                                    <h3 class="font-bold text-yellow-800">2. Conferência</h3>
+                                    <p class="text-yellow-700">No momento de emitir o documento fiscal, a empresa pode usar a calculadora para garantir que seus próprios sistemas estão calculando o imposto de forma correta, idêntica à forma como o Fisco irá calcular.</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-lg">
+                                    <h3 class="font-bold text-sky-700">3. Integração (via API)</h3>
+                                    <p>Além de estar disponível no portal, a calculadora poderá ser integrada (via API) aos sistemas de gestão (ERPs) das empresas, permitindo que a validação do cálculo seja feita de forma automática.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-center justify-center h-full">
+                            <div class="mt-10 max-w-4xl mx-auto">
+                                <img src="aula 01/Captura de tela 2025-07-07 134619.png" alt="Fluxograma da Calculadora" class="rounded-xl shadow-2xl w-full h-auto mx-auto">
+                            </div>
+                            <p class="mt-4 text-sm text-slate-600 text-center">Em vez de cada empresa ter que interpretar a legislação e desenvolver seu próprio motor de cálculo, o governo fornecerá uma ferramenta oficial</p>
+                        </div>
+                    </div>
+                </div>
+            </div>       
+        </section>
+
+        <!-- Sincronismo -->
+        <section id="sincronismo" class="section py-16 sm:py-24 bg-white">a
+             <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-5xl font-bold text-slate-800 tracking-tight sm:text-4xl">Sincronismo</h2>
+                    <p class="mt-4 max-w-5xl mx-auto text-lg text-slate-600">O pilar do Sincronismo é fundamental para que o modelo de IVA-Dual com a <strong>CBS</strong> e o <strong>IBS</strong> funcione sem gerar conflitos para o contribuinte.</p>
+                    <div class="mt-10 max-w-4xl mx-auto">
+                        <img src="aula 01/Captura de tela 2025-07-07 135032.png" alt="Sincronismo" class="rounded-xl shadow-2xl w-full h-auto">
+                    </div>
+                    <p class="mt-4 text-sm text-slate-600 text-center">Embora a CBS seja gerenciada pela Receita Federal e o IBS pelo Comitê Gestor dos estados e municípios, <br/> a plataforma digital foi construída para que ambos os sistemas trabalhem em perfeita harmonia.</p>
+                </div>
+        </section>
+  
+         <!-- Nuvem Soberana -->
+        <section id="nuvem" class="section py-16 sm:py-244 bg-slate-100">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-5xl font-bold text-slate-800 tracking-tight sm:text-4xl">Nuvem Soberana</h2>
+                    <p class="mt-4 max-w-5xl mx-auto text-lg text-slate-600">O pilar da Nuvem Soberana é essencial para garantir a soberania dos dados e a proteção das informações dos contribuintes.</p>
+                    <div class="mt-10 max-w-4xl mx-auto">
+                        <img src="aula 01/Captura de tela 2025-07-07 134724.png" alt="Nuvem Soberana" class="rounded-xl shadow-2xl w-full h-auto">
+                    </div>
+                    <p class="mt-4 text-sm text-slate-600 text-center"></p>
+                </div>     
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-slate-50 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold text-sky-700 mb-2">#Infraestrutura</h3>
+                        <p class="mt-4 text-lg text-sky-800">
+                            É essa padronização que torna possível a toda a infraestrutura de tecnologia e os dados da reforma rodam em datacenters localizados fisicamente no Brasil, sob gestão e controle nacionais.
+                        </p>
+                    </div>      
+                    <div class="bg-slate-50 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold text-sky-700 mb-2">#Controle</h3>
+                       <p class="mt-4 text-lg text-sky-800">
+                          O governo tem controle total sobre quem acessa as informações, aumentando a transparência e a segurança de todo o ecossistema.
+                        </p>
+                    </div>    
+                    <div class="bg-slate-50 p-6 rounded-lg">
+                       <h3 class="text-xl font-bold text-sky-700 mb-2">#Segurança</h3>
+                       <p class="text-lg text-sky-800">
+                          Proteção robusta contra acessos externos não autorizados. Isso é gerenciado pelo SERPRO, garantindo que os dados não saiam do país e não fiquem hospedados em nuvens de empresas estrangeiras.
+                        </p>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold text-sky-700 mb-2">#Soberania</h3>
+                         <p class="mt-4 text-lg text-sky-800">
+                            Os dados ficam sob a jurisdição das leis brasileiras, garantindo que nenhuma entidade estrangeira possa acessá-los.
+                        </p>
+                    </div>
+                </div>
+            </div>
+-
+        </section>
+
+        <!-- Motor de Regras -->
+        <section id="motor" class="section py-16 sm:py-24 bg-white">  
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-5xl font-bold text-slate-800 tracking-tight sm:text-4xl">Motor de Regras</h2>
+                    <p class="mt-4 max-w-5xl mx-auto text-lg text-slate-600">O Motor de Regras é o pilar que garante a agilidade e a flexibilidade do novo sistema tributário.</p>
+                </div>
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <div class="flex flex-col justify-center h-full">
+                        <div class="space-y-4">
+                            <div class="bg-slate-50 p-4 rounded-lg">
+                                <h3 class="font-bold text-sky-700">1. Parametrizável</h3>
+                                <p>Em vez de as regras de cálculo, alíquotas e exceções estarem travadas dentro do código-fonte do sistema, elas ficam em um módulo separado.</p>
+                            </div>
+                            <div class="bg-slate-50 p-4 rounded-r-lg">
+                                <h3 class="font-bold text-sky-700">2. Agilidade</h3>
+                                <p>Isso significa que, quando a legislação mudar, a própria equipe da Receita Federal ou do Comitê Gestor poderá atualizar essas regras diretamente no sistema, sem a necessidade de um longo e complexo processo de desenvolvimento de software.</p>
+                            </div>
+                            <div class="bg-slate-50 p-4 rounded-lg">
+                                <h3 class="font-bold text-sky-700">3. Dinamismo</h3>
+                                <p>O grande benefício é a capacidade de adaptar o sistema a novas leis de forma muito mais rápida e eficiente, tornando a administração tributária mais dinâmica.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-center justify-center h-full">
+                        <div class="mt-10 max-w-4xl mx-auto">
+                            <img src="aula 01/Captura de tela 2025-07-08 094349.png" alt="Fluxograma da Calculadora" class="rounded-xl shadow-2xl w-full h-auto mx-auto">
+                        </div>
+                        <p class="mt-4 text-sm text-slate-600 text-center">Em vez de cada empresa ter que interpretar a legislação e desenvolver seu próprio motor de cálculo, o governo fornecerá uma ferramenta oficial</p>
+                    </div>
+                </div>
+            </div>
+        +</section>
+
+
+
+
+    </main>
+    
+    <footer class="bg-slate-800 text-slate-300 py-8">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p>Este é um projeto ilustrativo para explicar a Reforma Tributária.</p>
+        </div>
+    </footer>
+
+    <div id="modal-backdrop" class="fixed inset-0 bg-black bg-opacity-60 hidden items-center justify-center p-4 z-50">
+        <div id="modal-content" class="bg-white rounded-lg shadow-2xl w-full max-w-md p-6 sm:p-8 relative transform scale-95 opacity-0">
+            <button id="modal-close" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <h3 id="modal-title" class="text-2xl font-bold text-slate-800 mb-4"></h3>
+            <p id="modal-description" class="text-slate-600"></p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const pillarsData = [
+                { id: 'roc_pilar', title: 'ROC', description: 'O pilar principal. Padroniza todos os documentos fiscais em um formato digital único, funcionando como um "tradutor universal" para todas as operações de consumo.' },
+                { id: 'motor', title: 'Motor de Regras', description: 'Um sistema flexível que permite à Receita Federal atualizar as regras tributárias rapidamente, sem precisar de alterações complexas no código-fonte do sistema, garantindo agilidade.' },
+                { id: 'nuvem_pilar', title: 'Nuvem Soberana', description: 'Toda a infraestrutura tecnológica roda em datacenters localizados no Brasil. Isso garante a segurança e a soberania dos dados fiscais do governo e dos cidadãos.' },
+                { id: 'sincronismo', title: 'Sincronismo', description: 'Assegura que a apuração da CBS (federal) e do IBS (estadual/municipal) seja feita de forma consistente e simultânea, evitando divergências e garantindo que a base de cálculo seja a mesma.' },
+                { id: 'portal', title: 'Portal da Reforma', description: 'Um ponto de acesso único e seguro (via Gov.br) para que os contribuintes possam consultar suas informações, validar apurações e interagir com o Fisco de forma centralizada.' },
+                { id: 'apuracao_pilar', title: 'Apuração Assistida', description: 'O sistema, alimentado pelo ROC, calcula automaticamente os débitos e créditos de cada empresa. O contribuinte não "declara" mais o imposto, apenas "valida" a apuração feita pelo sistema.' },
+                { id: 'calculadora', title: 'Calculadora', description: 'Uma ferramenta de apoio oficial, disponível para as empresas, que permite simular e conferir o cálculo dos novos tributos em suas operações, garantindo previsibilidade.' }
+            ];
+
+            const pillarsGrid = document.getElementById('pillars-grid');
+            pillarsData.forEach(pillar => {
+                const card = document.createElement('div');
+                card.className = 'pillar-card cursor-pointer bg-white p-6 rounded-lg shadow-md flex flex-col items-center text-center';
+                card.dataset.id = pillar.id;
+                card.innerHTML = `
+                    <div class="bg-sky-100 text-sky-600 rounded-full p-3 mb-4">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <h4 class="font-bold text-lg text-slate-800">${pillar.title}</h4>
+                `;
+                pillarsGrid.appendChild(card);
+            });
+
+            const modalBackdrop = document.getElementById('modal-backdrop');
+            const modalContent = document.getElementById('modal-content');
+            const modalTitle = document.getElementById('modal-title');
+            const modalDescription = document.getElementById('modal-description');
+            const closeModalBtn = document.getElementById('modal-close');
+
+            pillarsGrid.addEventListener('click', (e) => {
+                const card = e.target.closest('.pillar-card');
+                if (card) {
+                    const pillar = pillarsData.find(p => p.id === card.dataset.id);
+                    if (pillar) {
+                        modalTitle.textContent = pillar.title;
+                        modalDescription.textContent = pillar.description;
+                        modalBackdrop.classList.remove('hidden');
+                        modalBackdrop.classList.add('flex');
+                        setTimeout(() => {
+                           modalBackdrop.style.opacity = '1';
+                           modalContent.style.opacity = '1';
+                           modalContent.style.transform = 'scale(1)';
+                        }, 10);
+                    }
+                }
+            });
+
+            function closeModal() {
+                modalBackdrop.style.opacity = '0';
+                modalContent.style.opacity = '0';
+                modalContent.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    modalBackdrop.classList.add('hidden');
+                    modalBackdrop.classList.remove('flex');
+                }, 300);
+            }
+
+            closeModalBtn.addEventListener('click', closeModal);
+            modalBackdrop.addEventListener('click', (e) => {
+                if (e.target === modalBackdrop) {
+                    closeModal();
+                }
+            });
+            
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.section');
+
+            function changeActiveLink() {
+                let index = sections.length;
+                while(--index && window.scrollY + 100 < sections[index].offsetTop) {}
+                
+                navLinks.forEach((link) => link.classList.remove('active'));
+                const activeLink = document.querySelector(`.nav-link[href="#${sections[index].id}"]`);
+                if(activeLink) {
+                   activeLink.classList.add('active');
+                }
+            }
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetSection = document.querySelector(targetId);
+                    if (targetSection) {
+                        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        if(window.innerWidth < 768) {
+                           mobileMenu.classList.add('hidden');
+                        }
+                    }
+                });
+            });
+
+            window.addEventListener('scroll', changeActiveLink);
+            changeActiveLink();
+
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            const ctx = document.getElementById('taxChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Impostos Substituídos', 'Novos Impostos Principais'],
+                    datasets: [{
+                        label: 'Quantidade de Impostos',
+                        data: [5, 2],
+                        backgroundColor: [
+                            '#ef4444', // red-500
+                            '#0ea5e9'  // sky-500
+                        ],
+                        borderColor: '#f8fafc',
+                        borderWidth: 4,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                font: {
+                                    size: 14,
+                                    family: 'Inter, sans-serif'
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed !== null) {
+                                        label += context.parsed;
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
